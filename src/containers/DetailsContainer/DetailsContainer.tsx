@@ -38,6 +38,10 @@ const DetailsContainer = () => {
     getAQI();
   }, []);
 
+  console.log(aqi, healthRecommendation)
+  setAqi(1)
+  setHealthRecommendation([])
+
   const triggerTitle = (
     <>
       <div className="flex items-center justify-between py-3">
