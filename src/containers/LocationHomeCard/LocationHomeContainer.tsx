@@ -14,16 +14,20 @@ const LocationHomeContainer: React.FC<LocationHomeCardProps> = ({
   const navigate = useNavigate();
   let text = "";
   let variant: "info" | "warning" | "error" = "info";
+  let infoText = "";
 
   if (severity === "safe") {
     text = "Safe Zone";
     variant = "info";
+    infoText = "You're in a safe area";
   } else if (severity === "yellow") {
     text = "Yellow Zone";
     variant = "warning";
+    infoText = "There are near wildfire, but it wont directly impact this area";
   } else if (severity === "red") {
     text = "Red Zone";
     variant = "error";
+    infoText = "There’s a possibilities wildfire smoke impact this area";
   }
 
   return (
@@ -44,15 +48,13 @@ const LocationHomeContainer: React.FC<LocationHomeCardProps> = ({
         <Tag text={text} variant={variant} />
       </div>
 
-      <div className="text-xs text-gray-400 font-medium">
-        There are near wildfire, but it wont directly impact this area
-      </div>
+      <div className="text-xs text-gray-400 font-medium">{infoText}</div>
 
-      <div className="border-b border-gray-400" />
+      {/* <div className="border-b border-gray-400" />
 
       <div className="text-xs font-medium">
         Anginnya Berapa, Panasnya Berapa, Datanya Apa aja
-      </div>
+      </div> */}
 
       <div />
     </div>

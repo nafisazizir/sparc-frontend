@@ -52,12 +52,6 @@ const DetailsContainer = () => {
     getAQI();
   }, []);
 
-  console.log(
-    `rgb(${aqiIndex?.color.red ?? 0}, ${aqiIndex?.color.green ?? 0}, ${
-      aqiIndex?.color.blue ?? 0
-    })`
-  );
-
   return (
     <div className="flex flex-col gap-4">
       <div className="flex items-center justify-between">
