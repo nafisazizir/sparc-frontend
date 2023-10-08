@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import "./style.css";
 
 import { getDownloadURL, ref } from "firebase/storage";
@@ -7,8 +7,17 @@ import { storage } from "../../utils/firebase";
 import { useLocation } from "../../context/LocationContext";
 import ReportsForm from "../../components/ReportsForm/ReportsForm";
 
+import { Control } from "leaflet";
 import "leaflet/dist/leaflet.css";
-import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
+
+import {
+  MapContainer,
+  TileLayer,
+  Marker,
+  Popup,
+  useMap,
+  LayersControl,
+} from "react-leaflet";
 import MarkerClusterGroup from "react-leaflet-cluster";
 
 import Modal from "../../components/Modal/Modal";
@@ -16,9 +25,9 @@ import MapLayout from "../../components/MapLayout/MapLayout";
 import LocationHomeContainer from "../../containers/LocationHomeCard/LocationHomeContainer";
 import { FireMarker } from "../../components/Maps/FireMarker/FireMarker";
 
-import Fire from "../../assets/fire.svg";
 import ReportLogo from "../../assets/report.svg?react";
 import CurrentLocation from "../../assets/current-location.svg?react";
+import LeafletVelocity from "../../components/Maps/LeafletVelocity/LeafletVelocity";
 
 const Home = () => {
   const { location, setLocation, locationData, setLocationData } =
@@ -35,6 +44,13 @@ const Home = () => {
         .then((json) => setFires(json));
     })();
   }, []);
+
+  const [windUrl, setWindUrl] = useState<string>();
+  useEffect(() => {
+    getDownloadURL(ref(storage, "wind.json")).then((url) => setWindUrl(url));
+  }, []);
+
+  const layerControlRef = useRef<Control.Layers>(null);
 
   const getUserLocation = () => {
     if (navigator.geolocation) {
@@ -142,16 +158,17 @@ const Home = () => {
           <Popup>Your location</Popup>
         </Marker>
 
-        {/* <Polygon positions={polygon.map((p) => ({ lat: p[0], lng: p[1] }))} /> */}
+        <LayersControl position="topright" ref={layerControlRef}>
+          <LayersControl.Overlay name="Active Fire">
+            <MarkerClusterGroup chunkedLoading>
+              {fires.map((f) => (
+                <FireMarker key={crypto.randomUUID()} fire={f} />
+              ))}
+            </MarkerClusterGroup>
+          </LayersControl.Overlay>
+        </LayersControl>
 
-        <MarkerClusterGroup chunkedLoading>
-          {fires.map((f) => (
-            <FireMarker
-              key={`${f.latitude}-${f.longitude}-${f.intensity}`}
-              fire={f}
-            />
-          ))}
-        </MarkerClusterGroup>
+        <LeafletVelocity ref={layerControlRef} />
       </MapContainer>
 
       <LocationHomeContainer locationData={locationData} severity="safe" />

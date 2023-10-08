@@ -1,6 +1,6 @@
-import { FC, useState } from "react";
+import { FC } from "react";
 
-import { Marker, Polygon, Popup } from "react-leaflet";
+import { Marker, Popup } from "react-leaflet";
 
 import { Icon } from "leaflet";
 import Fire from "../../../assets/fire.svg";
@@ -10,8 +10,6 @@ type FireMarkerProps = {
 };
 
 const FireMarker: FC<FireMarkerProps> = ({ fire }) => {
-  const [showSmoke, setShowSmoke] = useState(false);
-
   const wildfireIcon = new Icon({
     iconUrl: Fire,
     iconSize: [38, 38],
@@ -28,8 +26,6 @@ const FireMarker: FC<FireMarkerProps> = ({ fire }) => {
           {fire.latitude}, {fire.longitude}
         </Popup>
       </Marker>
-
-      {/* <Polygon positions={fire.smoke} /> */}
     </div>
   );
 };
