@@ -17,7 +17,7 @@ const Home = () => {
   const [locationData, setLocationData] = useState<string[]>([
     "Jakarta, Jakarta",
   ]);
-  const wildfirePoints = [
+  const wildfirePoints: [number, number][] = [
     [-6.23, 106.75],
     [-6.14, 106.93],
     [-6.13, 106.82],
@@ -105,9 +105,7 @@ const Home = () => {
           <Popup>Your location</Popup>
         </Marker>
 
-        <MarkerClusterGroup
-          chunkedLoading
-        >
+        <MarkerClusterGroup chunkedLoading>
           {wildfirePoints.map((point) => (
             <Marker
               key={crypto.randomUUID()}
