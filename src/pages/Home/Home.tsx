@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useMemo } from "react";
 import "./style.css";
 
 import { getDownloadURL, ref } from "firebase/storage";
@@ -30,6 +30,7 @@ import ReportLogo from "../../assets/report.svg?react";
 import CurrentLocation from "../../assets/current-location.svg?react";
 import LeafletVelocity from "../../components/Maps/LeafletVelocity/LeafletVelocity";
 import { SmokeMarker } from "../../components/Maps/SmokeMarker/SmokeMarker";
+import { checkZone } from "../../utils/zone";
 
 const Home = () => {
   const { location, setLocation, locationData, setLocationData } =
@@ -56,6 +57,11 @@ const Home = () => {
         .then((json) => setSmokes(json));
     })();
   }, []);
+
+  const zone = useMemo(() => {
+    if (!smokes || !smokes.length) return;
+    return checkZone(smokes, location[0], location[1]);
+  }, [location, smokes]);
 
   const layerControlRef = useRef<Control.Layers>(null);
 
@@ -186,7 +192,7 @@ const Home = () => {
         <LeafletVelocity ref={layerControlRef} />
       </MapContainer>
 
-      <LocationHomeContainer locationData={locationData} severity="safe" />
+      <LocationHomeContainer locationData={locationData} severity={zone} />
     </MapLayout>
   );
 };

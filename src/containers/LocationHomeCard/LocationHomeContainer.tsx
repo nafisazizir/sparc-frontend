@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 
 interface LocationHomeCardProps {
   locationData: string[];
-  severity: "safe" | "yellow" | "red";
+  severity?: "safe" | "yellow" | "red";
 }
 
 const LocationHomeContainer: React.FC<LocationHomeCardProps> = ({
@@ -45,7 +45,7 @@ const LocationHomeContainer: React.FC<LocationHomeCardProps> = ({
           </div>
         </div>
 
-        <Tag text={text} variant={variant} />
+        {severity && <Tag text={text} variant={variant} />}
       </div>
 
       <div className="text-xs text-gray-400 font-medium">{infoText}</div>

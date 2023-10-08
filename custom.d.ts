@@ -23,4 +23,4 @@ declare type Smoke = {
   yellow_lat: number;
   yellow_lon: number;
   yellow_area: number;
-}
+};
