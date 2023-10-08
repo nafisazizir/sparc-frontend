@@ -5,6 +5,7 @@ import Logo from "../../assets/logo.svg?react";
 import "./style.css";
 import DropdownSelect from "./DropdownSelect";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
+import useReportModal from "./useReportsForm";
 
 interface ReportsFormProps {
   title: string;
@@ -12,13 +13,49 @@ interface ReportsFormProps {
   onCancel: () => void;
 }
 
+const perceivedAirQuality = [
+  {
+    value: "normal",
+    label: "Normal"
+  },
+  {
+    value: "quite_unhealthy",
+    label: "Quite Unhealthy"
+  },
+  {
+    value: "very_unhealthy",
+    label: "Very Unhealthy"
+  },
+  {
+    value: "hazardous",
+    label: "Hazardous"
+  }
+];
+
+const smokeIntensity = [
+  {
+    value: "none",
+    label: "None Visible"
+  },
+  {
+    value: "visible",
+    label: "Visible"
+  },
+  {
+    value: "thick",
+    label: "Thick"
+  }
+];
+
 const ReportsForm: React.FC<ReportsFormProps> = ({
   title,
   subtitle,
   onCancel,
 }) => {
+  const [submitted, setSubmitted] = React.useState<boolean>(false);
   const [latitude, setLatitude] = React.useState<number>(0);
   const [longitude, setLongitude] = React.useState<number>(0);
+  const reportModal = useReportModal();
 
   React.useEffect(() => {
     getUserLocation();
@@ -32,8 +69,6 @@ const ReportsForm: React.FC<ReportsFormProps> = ({
 
          setLatitude(latitude);
          setLongitude(longitude);
-
-         console.log(`set lat, long: ${latitude}:${longitude}`)
         },
         (error) => {
           console.error("Error getting user location:", error);
@@ -43,40 +78,6 @@ const ReportsForm: React.FC<ReportsFormProps> = ({
       console.error("Geolocation is not supported by this browser.");
     }
   };
-
-  const perceivedAirQuality = [
-    {
-      value: "normal",
-      label: "Normal"
-    },
-    {
-      value: "quite_unhealthy",
-      label: "Quite Unhealthy"
-    },
-    {
-      value: "very_unhealthy",
-      label: "Very Unhealthy"
-    },
-    {
-      value: "hazardous",
-      label: "Hazardous"
-    }
-  ];
-
-  const smokeIntensity = [
-    {
-      value: "none",
-      label: "None Visible"
-    },
-    {
-      value: "visible",
-      label: "Visible"
-    },
-    {
-      value: "thick",
-      label: "Thick"
-    }
-  ];
 
   const { handleSubmit, setValue } = useForm();
 
@@ -116,11 +117,6 @@ const ReportsForm: React.FC<ReportsFormProps> = ({
       body: body
     }
 
-    console.log("Sending request to server...");
-    console.log(body);
-    console.log(options)
-    console.log(`lat, long: ${latitude}:${longitude}`)
-
     try {
       const res = await fetch(url, options);
 
@@ -132,12 +128,29 @@ const ReportsForm: React.FC<ReportsFormProps> = ({
     } catch (e) {
       console.error(e);
     }
-    
-    // try {
-    // } catch (error) {
-    //   console.error("Error sending data to database:", error);
-    // }
+
+    document.location.href = "/";
   };
+
+  if (submitted) {
+    return (
+      <div className="modal-container">
+      <div className="rounded-lg px-6 py-8 w-4/5 bg-white flex flex-col items-center gap-8 text-center">
+        <Logo />
+
+        <div className="flex flex-col items-center gap-3">
+          <div className="text-sm font-bold text-center">{"Thanks for helping communities to respond to smoke!"}</div>
+          {/* <div className="text-sm text-center">{subtitle}</div> */}
+        </div>
+
+        <div className="flex flex-row justify-center items-center">
+          {/* Cancel */}
+          <Button label={"Close"} onClick={onCancel} secondary size="small" />
+        </div>
+      </div>
+    </div>
+    );
+  }
 
   return (
     <div className="modal-container">
@@ -178,13 +191,11 @@ const ReportsForm: React.FC<ReportsFormProps> = ({
           <div className="px-2"></div>
 
           {/* Submit */}
-          <Button label={"Submit"} 
+          <Button 
+            label={"Submit"} 
             onClick={handleSubmit(onSubmit)}
-            // onClick={() => {
-            //   handleSubmit(onSubmit);
-            //   onCancel();
-            // }} 
-          size="small" />
+            size="small" 
+          />
         </div>
       </div>
     </div>
