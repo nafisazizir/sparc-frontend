@@ -1,25 +1,30 @@
 import { useState, useEffect } from "react";
-import MapLayout from "../../components/MapLayout/MapLayout";
+import "./style.css";
+
+import { getDownloadURL, ref } from "firebase/storage";
+import { storage } from "../../utils/firebase";
+
+import { useLocation } from "../../context/LocationContext";
+import ReportsForm from "../../components/ReportsForm/ReportsForm";
+
+import "leaflet/dist/leaflet.css";
 import {
   MapContainer,
   TileLayer,
   Marker,
   Popup,
   useMap,
-  Polygon,
 } from "react-leaflet";
-import Modal from "../../components/Modal/Modal";
-import LocationHomeContainer from "../../containers/LocationHomeCard/LocationHomeContainer";
-import "leaflet/dist/leaflet.css";
-import "./style.css";
-import { Icon } from "leaflet";
-import Fire from "../../assets/fire.svg";
 import MarkerClusterGroup from "react-leaflet-cluster";
-import CurrentLocation from "../../assets/current-location.svg?react";
-import ReportLogo from "../../assets/report.svg?react";
 
-import { useLocation } from "../../context/LocationContext";
-import ReportsForm from "../../components/ReportsForm/ReportsForm";
+import Modal from "../../components/Modal/Modal";
+import MapLayout from "../../components/MapLayout/MapLayout";
+import LocationHomeContainer from "../../containers/LocationHomeCard/LocationHomeContainer";
+import { FireMarker } from "../../components/Maps/FireMarker/FireMarker";
+
+import Fire from "../../assets/fire.svg";
+import ReportLogo from "../../assets/report.svg?react";
+import CurrentLocation from "../../assets/current-location.svg?react";
 
 const Home = () => {
   const { location, setLocation, locationData, setLocationData } =
@@ -27,23 +32,15 @@ const Home = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [formVisible, setFormVisible] = useState(false);
 
-  const wildfirePoints: [number, number][] = [
-    [-6.23, 106.75],
-    [-6.14, 106.93],
-    [-6.13, 106.82],
-    [-5.59448, 123.7897],
-  ];
-  const wildfireArea: [number, number][] = [
-    [-6.23, 106.75],
-    [-6.14, 106.93],
-    [-6.13, 106.82],
-    [-6.3644538, 106.8210833],
-  ];
-
-  const wildfireIcon = new Icon({
-    iconUrl: Fire,
-    iconSize: [38, 38],
-  });
+  const [fires, setFires] = useState<Fire[]>([]);
+  useEffect(() => {
+    (async () => {
+      const url = await getDownloadURL(ref(storage, "all.json"));
+      fetch(url)
+        .then((res) => res.json())
+        .then((json) => setFires(json));
+    })();
+  }, []);
 
   const getUserLocation = () => {
     if (navigator.geolocation) {
@@ -148,19 +145,18 @@ const Home = () => {
 
         <UpdatedMap />
 
-        <Polygon pathOptions={{ color: "red" }} positions={wildfireArea} />
-
         <Marker position={location}>
           <Popup>Your location</Popup>
         </Marker>
 
+        {/* <Polygon positions={polygon.map((p) => ({ lat: p[0], lng: p[1] }))} /> */}
+
         <MarkerClusterGroup chunkedLoading>
-          {wildfirePoints.map((point) => (
-            <Marker
-              key={crypto.randomUUID()}
-              position={point}
-              icon={wildfireIcon}
-            ></Marker>
+          {fires.map((f) => (
+            <FireMarker
+              key={`${f.latitude}-${f.longitude}-${f.intensity}`}
+              fire={f}
+            />
           ))}
         </MarkerClusterGroup>
       </MapContainer>  

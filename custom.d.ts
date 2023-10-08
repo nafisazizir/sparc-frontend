@@ -6,3 +6,11 @@ declare module "*.svg" {
   >;
   export default ReactComponent;
 }
+
+declare type Fire = {
+  timestamp: Date;
+  latitude: number;
+  longitude: number;
+  intensity: number;
+  smoke: [number, number][];
+};
