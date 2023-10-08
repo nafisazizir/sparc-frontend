@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
+//@ts-nocheck
 import { forwardRef, useEffect } from "react";
 
 import "leaflet-velocity/dist/leaflet-velocity.css";
