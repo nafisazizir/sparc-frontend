@@ -5,13 +5,13 @@ import Collapsible from "react-collapsible";
 import DetailsService from "../../services/Details";
 import { useEffect, useState } from "react";
 import { AQIIndex, HealthRecommendations } from "../../services/Details";
+import { useLocation } from "../../context/LocationContext";
 import Plus from "../../assets/plus.svg?react";
 import Minus from "../../assets/minus.svg?react";
 import "./style.css";
 
 const DetailsContainer = () => {
-  const location = [-6.22584, 106.856812];
-  const locationData = ["Depok, Jawa Barat"];
+  const { location, locationData } = useLocation();
   const [aqiIndex, setAqiIndex] = useState<AQIIndex>();
   const [healthRecommendations, setHealthRecommendations] =
     useState<HealthRecommendations>({
@@ -62,7 +62,7 @@ const DetailsContainer = () => {
     <div className="flex flex-col gap-4">
       <div className="flex items-center justify-between">
         <div className="font-bold text-xl">
-          {locationData[0]} {locationData[1]}
+          {locationData[0]}, {locationData[1]}
         </div>
 
         <Tag text={text} variant={variant} />
