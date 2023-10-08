@@ -16,17 +16,15 @@ const FireMarker: FC<FireMarkerProps> = ({ fire }) => {
   });
 
   return (
-    <div onClick={() => console.log("a")}>
-      <Marker
-        key={crypto.randomUUID()}
-        position={{ lat: fire.latitude, lng: fire.longitude }}
-        icon={wildfireIcon}
-      >
-        <Popup>
-          {fire.latitude}, {fire.longitude}
-        </Popup>
-      </Marker>
-    </div>
+    <Marker
+      key={crypto.randomUUID()}
+      position={{ lat: fire.latitude, lng: fire.longitude }}
+      icon={wildfireIcon}
+    >
+      <Popup>
+        {fire.latitude}, {fire.longitude}
+      </Popup>
+    </Marker>
   );
 };
 

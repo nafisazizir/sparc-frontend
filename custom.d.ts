@@ -12,5 +12,15 @@ declare type Fire = {
   latitude: number;
   longitude: number;
   intensity: number;
-  smoke: [number, number][];
 };
+
+declare type Smoke = {
+  lat: number;
+  lon: number;
+  red_lat: number;
+  red_lon: number;
+  red_area: number;
+  yellow_lat: number;
+  yellow_lon: number;
+  yellow_area: number;
+}

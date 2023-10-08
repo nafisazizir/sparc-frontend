@@ -17,6 +17,7 @@ import {
   Popup,
   useMap,
   LayersControl,
+  FeatureGroup,
 } from "react-leaflet";
 import MarkerClusterGroup from "react-leaflet-cluster";
 
@@ -28,6 +29,7 @@ import { FireMarker } from "../../components/Maps/FireMarker/FireMarker";
 import ReportLogo from "../../assets/report.svg?react";
 import CurrentLocation from "../../assets/current-location.svg?react";
 import LeafletVelocity from "../../components/Maps/LeafletVelocity/LeafletVelocity";
+import { SmokeMarker } from "../../components/Maps/SmokeMarker/SmokeMarker";
 
 const Home = () => {
   const { location, setLocation, locationData, setLocationData } =
@@ -38,16 +40,21 @@ const Home = () => {
   const [fires, setFires] = useState<Fire[]>([]);
   useEffect(() => {
     (async () => {
-      const url = await getDownloadURL(ref(storage, "all.json"));
+      const url = await getDownloadURL(ref(storage, "fire.json"));
       fetch(url)
         .then((res) => res.json())
         .then((json) => setFires(json));
     })();
   }, []);
 
-  const [windUrl, setWindUrl] = useState<string>();
+  const [smokes, setSmokes] = useState<Smoke[]>([]);
   useEffect(() => {
-    getDownloadURL(ref(storage, "wind.json")).then((url) => setWindUrl(url));
+    (async () => {
+      const url = await getDownloadURL(ref(storage, "smoke.json"));
+      fetch(url)
+        .then((res) => res.json())
+        .then((json) => setSmokes(json));
+    })();
   }, []);
 
   const layerControlRef = useRef<Control.Layers>(null);
@@ -160,11 +167,19 @@ const Home = () => {
 
         <LayersControl position="topright" ref={layerControlRef}>
           <LayersControl.Overlay name="Active Fire">
-            <MarkerClusterGroup chunkedLoading>
+            <MarkerClusterGroup checked chunkedLoading>
               {fires.map((f) => (
                 <FireMarker key={crypto.randomUUID()} fire={f} />
               ))}
             </MarkerClusterGroup>
+          </LayersControl.Overlay>
+
+          <LayersControl.Overlay name="Smoke Simulation">
+            <FeatureGroup>
+              {smokes.map((s) => (
+                <SmokeMarker key={crypto.randomUUID()} smoke={s} />
+              ))}
+            </FeatureGroup>
           </LayersControl.Overlay>
         </LayersControl>
 
