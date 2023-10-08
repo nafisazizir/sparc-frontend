@@ -1,6 +1,13 @@
 import { useState, useEffect } from "react";
 import MapLayout from "../../components/MapLayout/MapLayout";
-import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
+import {
+  MapContainer,
+  TileLayer,
+  Marker,
+  Popup,
+  useMap,
+  Polyline,
+} from "react-leaflet";
 import Modal from "../../components/Modal/Modal";
 import LocationHomeContainer from "../../containers/LocationHomeCard/LocationHomeContainer";
 import "leaflet/dist/leaflet.css";
@@ -24,6 +31,14 @@ const Home = () => {
     [-6.23, 106.75],
     [-6.14, 106.93],
     [-6.13, 106.82],
+    [-5.59448, 123.7897],
+  ];
+  const wildfireArea: [number, number][] = [
+    [-5.595054028509563, 123.7996835109691],
+    [-5.593905971490437, 123.77971648903089],
+    [-4.595554874580093, 123.83711933998721],
+    [-4.596702931599219, 123.85708636192543],
+    [-5.595054028509563, 123.7996835109691],
   ];
   const wildfireIcon = new Icon({
     iconUrl: Fire,
@@ -133,6 +148,8 @@ const Home = () => {
 
         <UpdatedMap />
 
+        <Polyline pathOptions={{ color: "red" }} positions={wildfireArea} />
+
         <Marker position={location}>
           <Popup>Your location</Popup>
         </Marker>
@@ -146,10 +163,10 @@ const Home = () => {
             ></Marker>
           ))}
         </MarkerClusterGroup>
-      </MapContainer>
-      
+      </MapContainer>  
       
       <LocationHomeContainer locationData={locationData} severity="safe" />
+
     </MapLayout>
   );
 };

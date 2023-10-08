@@ -11,7 +11,7 @@ const Tag: React.FC<TagProps> = ({ text, variant = "info" }) => {
   if (variant === "info") {
     tagColorClasses = "bg-jordy-blue-800 text-white";
   } else if (variant === "warning") {
-    tagColorClasses = "bg-yellow-500 text-black";
+    tagColorClasses = "bg-yellow-500 text-white";
   } else if (variant === "error") {
     tagColorClasses = "bg-red-500 text-white";
   }

@@ -49,7 +49,7 @@ export interface AQIResponse {
 
 class DetailsService {
   getAQI(lat: number, long: number): Promise<AxiosResponse<AQIResponse>> {
-    return http.post(`air-quality-index/`, {
+    return http.post(`fetch-aqi/`, {
       latitude: lat,
       longitude: long,
       languageCode: "en",
