@@ -1,5 +1,6 @@
 import Tag from "../../components/Tag/Tag";
 import "./style.css";
+import { useNavigate } from "react-router-dom";
 
 interface LocationHomeCardProps {
   locationData: string[];
@@ -10,6 +11,7 @@ const LocationHomeContainer: React.FC<LocationHomeCardProps> = ({
   locationData,
   severity,
 }) => {
+  const navigate = useNavigate();
   let text = "";
   let variant: "info" | "warning" | "error" = "info";
 
@@ -27,7 +29,7 @@ const LocationHomeContainer: React.FC<LocationHomeCardProps> = ({
   return (
     <div
       className="location-home-container flex flex-col gap-2 shadow-2xl cursor-pointer"
-      onClick={() => ""}
+      onClick={() => navigate("/details")}
     >
       <div className="flex items-center justify-between">
         <div>

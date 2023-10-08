@@ -1,3 +1,9 @@
 .leaflet-container {
   height: calc(100vh - 48px);
 }
+
+.current-location {
+  top: 130px;
+  left: 10px;
+  z-index: 998;
+}

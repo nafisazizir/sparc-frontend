@@ -8,6 +8,7 @@ import "./style.css";
 import { Icon } from "leaflet";
 import Fire from "../../assets/fire.svg";
 import MarkerClusterGroup from "react-leaflet-cluster";
+import CurrentLocation from "../../assets/current-location.svg?react";
 
 const Home = () => {
   const [userLocation, setUserLocation] = useState<[number, number]>([
@@ -27,6 +28,7 @@ const Home = () => {
     iconSize: [38, 38],
   });
 
+
   const getUserLocation = () => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
@@ -44,6 +46,12 @@ const Home = () => {
   };
 
   function UpdatedMap() {
+    const map = useMap();
+    map.panTo(userLocation);
+    return null;
+  }
+
+  function MoveToCurrentLocation() {
     const map = useMap();
     map.panTo(userLocation);
     return null;
@@ -78,6 +86,12 @@ const Home = () => {
 
   return (
     <MapLayout>
+      <div
+        className="current-location bg-jordy-blue-500 rounded-full w-min p-0.5 absolute"
+        onClick={MoveToCurrentLocation}
+      >
+        <CurrentLocation />
+      </div>
       {modalVisible && (
         <Modal
           title={
