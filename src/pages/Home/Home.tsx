@@ -16,12 +16,16 @@ import { Icon } from "leaflet";
 import Fire from "../../assets/fire.svg";
 import MarkerClusterGroup from "react-leaflet-cluster";
 import CurrentLocation from "../../assets/current-location.svg?react";
+import ReportLogo from "../../assets/report.svg?react";
+
 import { useLocation } from "../../context/LocationContext";
+import ReportsForm from "../../components/ReportsForm/ReportsForm";
 
 const Home = () => {
   const { location, setLocation, locationData, setLocationData } =
     useLocation();
-  const [modalVisible, setModalVisible] = useState(true);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [formVisible, setFormVisible] = useState(false);
 
   const wildfirePoints: [number, number][] = [
     [-6.23, 106.75],
@@ -104,6 +108,23 @@ const Home = () => {
       >
         <CurrentLocation />
       </div>
+
+      <div
+        className="report-form bg-jordy-blue-500 rounded-full w-min p-0.5 absolute"
+        onClick={() => setFormVisible(true)}
+      >
+        <ReportLogo />
+      </div>
+
+      {formVisible && (
+        <ReportsForm 
+          title={"Report smoke in your area"}
+          subtitle="Your report will be used to better inform the community regarding local wildfire smoke information"
+          onCancel={() => setFormVisible(false)}
+        />
+      )}
+
+
       {modalVisible && (
         <Modal
           title={
@@ -142,9 +163,10 @@ const Home = () => {
             ></Marker>
           ))}
         </MarkerClusterGroup>
-      </MapContainer>
+      </MapContainer>  
+      
+      <LocationHomeContainer locationData={locationData} severity="safe" />
 
-      <LocationHomeContainer locationData={locationData} severity="yellow" />
     </MapLayout>
   );
 };
