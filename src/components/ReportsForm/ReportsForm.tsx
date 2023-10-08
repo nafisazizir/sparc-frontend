@@ -5,7 +5,7 @@ import Logo from "../../assets/logo.svg?react";
 import "./style.css";
 import DropdownSelect from "./DropdownSelect";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
-import useReportModal from "./useReportsForm";
+// import useReportModal from "./useReportsForm";
 
 interface ReportsFormProps {
   title: string;
@@ -52,10 +52,12 @@ const ReportsForm: React.FC<ReportsFormProps> = ({
   subtitle,
   onCancel,
 }) => {
-  const [submitted, setSubmitted] = React.useState<boolean>(false);
+  // const [submitted, setSubmitted] = React.useState<boolean>(false);
+  const submitted = false;
+  // const [submitted, setSubmitted] = React.useState<boolean>(false);
   const [latitude, setLatitude] = React.useState<number>(0);
   const [longitude, setLongitude] = React.useState<number>(0);
-  const reportModal = useReportModal();
+  // const reportModal = useReportModal();
 
   React.useEffect(() => {
     getUserLocation();

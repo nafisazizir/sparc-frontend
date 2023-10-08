@@ -6,7 +6,7 @@ import {
   Marker,
   Popup,
   useMap,
-  Polyline,
+  Polygon,
 } from "react-leaflet";
 import Modal from "../../components/Modal/Modal";
 import LocationHomeContainer from "../../containers/LocationHomeCard/LocationHomeContainer";
@@ -148,7 +148,7 @@ const Home = () => {
 
         <UpdatedMap />
 
-        <Polyline pathOptions={{ color: "red" }} positions={wildfireArea} />
+        <Polygon pathOptions={{ color: "red" }} positions={wildfireArea} />
 
         <Marker position={location}>
           <Popup>Your location</Popup>
