@@ -7,3 +7,9 @@
   left: 10px;
   z-index: 998;
 }
+
+.report-form {
+  bottom: 170px;
+  right: 20px;
+  z-index: 998;
+}
